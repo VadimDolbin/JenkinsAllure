@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 
 public class Mesto1Test {
 
@@ -65,4 +66,13 @@ public class Mesto1Test {
                 .then().assertThat().statusCode(200); // Проверяем, что сервер вернул код 200
     }
 
+    @Test
+    @DisplayName("Check user name")
+    @Description("This test is for check current user's name.")
+    public void checkUserName() {
+        given()
+                .auth().oauth2(bearerToken) // Передаём токен для аутентификации
+                .get("/api/users/me") // Делаем GET-запрос
+                .then().assertThat().body("data.name", equalTo("Incorrect Name")); // Проверяем, что имя соответствует ожидаемому
+    }
 }
